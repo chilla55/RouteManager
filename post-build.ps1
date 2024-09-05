@@ -59,6 +59,26 @@ if($Type -eq "UMM"){
 	#copy files to game plugin folder for BepInEx mod
 	Copy-Item -Force -Path ($ProjDir + "bin\" + $Config + "\RouteManager.BepInEx.dll") -Destination $Output
 	Copy-Item -Force -Path ($ProjDir + "configs\RouteManager.ini") -Destination $Output
+}elseif($Type -eq "Railloader"){
+	$json = Get-Content ($ProjDir + 'Definition.json') -raw | ConvertFrom-Json
+	$json.Version = $Ver
+	$json | ConvertTo-Json -depth 32| set-content ($ProjDir + '\Definition.json')
+	
+	#Files to be compressed if we make a Railloader zip (only applies to Release config)
+	$compress = @{
+		Path = ($ProjDir + "bin\Release\RouteManager.Railloader.dll"),($ProjDir + '\Definition.json')
+		CompressionLevel = "Fastest"
+		DestinationPath = ($SolnDir + "\Release\RouteManager.Railloader " + $Ver + ".zip")
+	}
+	
+	#Check the game mod folder exists
+	if (!(Test-Path ($Output))) {
+		New-Item -ItemType Directory -Path $Output
+	}
+	
+	#copy files to game plugin folder for BepInEx mod
+	Copy-Item -Force -Path ($ProjDir + "bin\" + $Config + "\RouteManager.Railloader.dll") -Destination $Output
+	Copy-Item -Force -Path ($ProjDir + '\Definition.json') -Destination $Output
 }
 
 #Are we building a release or debug?
