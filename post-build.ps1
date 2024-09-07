@@ -65,8 +65,14 @@ if($Type -eq "UMM"){
 	$json | ConvertTo-Json -depth 32| set-content ($ProjDir + '\Definition.json')
 	
 	#Files to be compressed if we make a Railloader zip (only applies to Release config)
+	if ($Config -eq "Release"){
+		$TempDir = Join-Path $Env:TEMP "RouteManager"
+		New-Item -ItemType Directory -Path $TempDir -Force | Out-Null
+		Copy-Item -Path (Join-Path $ProjDir "bin\Release\RouteManager.Railloader.dll") -Destination $TempDir
+		Copy-Item -Path (Join-Path $ProjDir "Definition.json") -Destination $TempDir
+	}
 	$compress = @{
-		Path = ($ProjDir + "bin\Release\RouteManager.Railloader.dll"),($ProjDir + '\Definition.json')
+		Path = ($TempDir)
 		CompressionLevel = "Fastest"
 		DestinationPath = ($SolnDir + "\Release\RouteManager.Railloader " + $Ver + ".zip")
 	}
@@ -88,4 +94,7 @@ if ($Config -eq "Release"){
 	}
 	
     Compress-Archive @compress -Force
+	if($Type -eq "Railloader"){
+		Remove-Item -Path $TempDir -Recurse -Force
+	}
 }

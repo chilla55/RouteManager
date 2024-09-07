@@ -42,7 +42,6 @@ namespace RouteManager.Railloader.Util
             RMRailloader.settingsData.showArrivalMessage = showArrivalMessage;
             RMRailloader.settingsData.showDepartureMessage = showDepartureMessage;
             RMRailloader.settingsData.waitUntilFull = waitUntilFull;
-
         }
     }
 }

@@ -17,7 +17,7 @@ namespace RouteManager.Railloader
         public static RailloaderLogger logger = new RailloaderLogger();
 
         public static RailloaderSettingsManager settingsManager = new RailloaderSettingsManager();
-        public static settings settings = new settings();
+        public static settings settings;
         public static SettingsData settingsData;
         public RMRailloader(IModDefinition self, IModdingContext moddingContext, IUIHelper uiHelper)
         {
@@ -34,9 +34,9 @@ namespace RouteManager.Railloader
         {
             List<string> ddlogstate = Enum.GetNames(typeof(v2.Logging.LogLevel)).ToList();
             builder.AddField("Current Log Level", builder.AddDropdown(ddlogstate, ddlogstate.FindIndex((string s) => s == settings.currentLogLevel.ToString()), (int i) => { settings.currentLogLevel = (v2.Logging.LogLevel)i; settings.Update(); }));
-            builder.AddField("Minimum Diesel Quantity", builder.AddInputFieldValidated(settings.minDieselQuantity.ToString(), (string f) => { settings.minDieselQuantity = float.Parse(f); settings.Update(); }, "[0123456789,.]"));
-            builder.AddField("Minimum Water Quantity", builder.AddInputFieldValidated(settings.minWaterQuantity.ToString(), (string f) => { settings.minWaterQuantity = float.Parse(f); settings.Update(); }, "[0123456789,.]"));
-            builder.AddField("Minimum Coal Quantity", builder.AddInputFieldValidated(settings.minCoalQuantity.ToString(), (string f) => { settings.minCoalQuantity = float.Parse(f); settings.Update(); }, "[0123456789,.]"));
+            builder.AddField("Minimum Diesel Quantity", builder.AddInputFieldValidated(settings.minDieselQuantity.ToString(), (string f) => { settings.minDieselQuantity = float.Parse(f); settings.Update(); }, "[0123456789,]"));
+            builder.AddField("Minimum Water Quantity", builder.AddInputFieldValidated(settings.minWaterQuantity.ToString(), (string f) => { settings.minWaterQuantity = float.Parse(f); settings.Update(); }, "[0123456789,]"));
+            builder.AddField("Minimum Coal Quantity", builder.AddInputFieldValidated(settings.minCoalQuantity.ToString(), (string f) => { settings.minCoalQuantity = float.Parse(f); settings.Update(); }, "[0123456789,]"));
             builder.AddField("Experimental UI", builder.AddToggle(() => settings.experimentalUI, (bool b) => { settings.experimentalUI = b; settings.Update(); }));
             builder.AddField("Show Timestamp", builder.AddToggle(() => settings.showTimestamp, (bool b) => { settings.showTimestamp = b; settings.Update(); }));
             builder.AddField("Show Daystamp", builder.AddToggle(() => settings.showDaystamp, (bool b) => { settings.showDaystamp = b; settings.Update(); }));
